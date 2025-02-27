@@ -9,6 +9,7 @@ interface EditUserForm {
   balance: number;
   accountNumber: string;
   bankAccount: string;
+  bankName?: string;
 }
 
 interface AddUserForm {
@@ -19,6 +20,7 @@ interface AddUserForm {
   accountType: string;
   balance: number;
   bankAccount: string;
+  bankName?: string;
   initialDeposit: number;
 }
 
@@ -75,18 +77,22 @@ function AdminDashboard() {
   };
 
   const handleEdit = (user: any) => {
-    setEditingUser(user.userId);
     setEditForm({
-      accountName: user.accountName || '',
-      accountType: user.accountType || '',
-      balance: user.balance || 0,
-      accountNumber: user.accountNumber || '',
-      bankAccount: user.bankAccount || '',
+      accountName: user.accountName,
+      accountType: user.accountType,
+      balance: user.balance,
+      accountNumber: user.accountNumber,
+      bankAccount: user.bankAccount || "",
+      bankName: user.bankName || "",
     });
+    setEditingUser(user.userId);
   };
 
   const handleSaveEdit = (userId: string) => {
-    updateUser(userId, editForm);
+    updateUser(userId, {
+      ...editForm,
+      bankAccount: editForm.bankAccount.trim() ? editForm.bankAccount : "Not Set"
+    });
     setEditingUser(null);
   };
 
@@ -109,9 +115,9 @@ function AdminDashboard() {
         bankAccount: addForm.bankAccount,
         isAdmin: false,
       };
-      
+
       addUser(newUser);
-      
+
       // Add initial deposit transaction if amount > 0
       if (addForm.initialDeposit > 0) {
         addTransaction({
@@ -120,7 +126,7 @@ function AdminDashboard() {
           userId: addForm.userId,
         });
       }
-      
+
       setShowAddModal(false);
       setAddForm({
         userId: '',
@@ -164,13 +170,17 @@ function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-custom-gradient">
       <nav className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <div className="flex items-center">
-              <IndianRupee className="w-8 h-8 text-blue-600" />
-              <span className="ml-2 text-xl font-semibold">Dhani-Finance Admin</span>
+              <img 
+                src="https://raw.githubusercontent.com/dljs2001/Images/refs/heads/main/logo.png" 
+                alt="Dhani Finance" 
+                className="h-10" 
+              />
+              <span className="ml-2 text-xl font-semibold">Admin</span>
             </div>
             <button
               onClick={handleLogout}
@@ -185,7 +195,7 @@ function AdminDashboard() {
 
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="bg-white rounded-lg shadow p-6 text-gray-900">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center">
                 <Users className="w-6 h-6 text-blue-600 mr-2" />
@@ -193,7 +203,7 @@ function AdminDashboard() {
               </div>
               <button
                 onClick={() => setShowAddModal(true)}
-                className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+                className="btn-gradient py-2 px-4 rounded-md"
               >
                 Add New User
               </button>
@@ -207,67 +217,104 @@ function AdminDashboard() {
                       <div className="text-sm font-medium text-gray-900">
                         {user.userId}
                       </div>
-                      <div className="text-sm text-gray-500">
-                        {editingUser === user.userId ? (
-                          <input
-                            type="text"
-                            value={editForm.accountName}
-                            onChange={(e) => setEditForm({ ...editForm, accountName: e.target.value })}
-                            className="border rounded px-2 py-1 w-full"
-                          />
-                        ) : (
-                          user.accountName
-                        )}
+                      <div>
+                        <p className="text-xs font-medium text-gray-500">Account Name</p>
+                        <div className="text-sm text-gray-700">
+                          {editingUser === user.userId ? (
+                            <input
+                              type="text"
+                              value={editForm.accountName}
+                              onChange={(e) => setEditForm({ ...editForm, accountName: e.target.value })}
+                              className="border rounded px-2 py-1 w-full"
+                            />
+                          ) : (
+                            user.accountName
+                          )}
+                        </div>
                       </div>
-                      <div className="text-sm text-gray-500">
-                        {editingUser === user.userId ? (
-                          <input
-                            type="text"
-                            value={editForm.accountNumber}
-                            onChange={(e) => setEditForm({ ...editForm, accountNumber: e.target.value })}
-                            className="border rounded px-2 py-1 w-full"
-                          />
-                        ) : (
-                          user.accountNumber
-                        )}
+                      <div>
+                        <p className="text-xs font-medium text-gray-500">Account Number</p>
+                        <div className="text-sm text-gray-700">
+                          {editingUser === user.userId ? (
+                            <input
+                              type="text"
+                              value={editForm.accountNumber}
+                              onChange={(e) => setEditForm({ ...editForm, accountNumber: e.target.value })}
+                              className="border rounded px-2 py-1 w-full"
+                            />
+                          ) : (
+                            user.accountNumber
+                          )}
+                        </div>
                       </div>
-                      <div className="text-sm text-gray-500">
-                        {editingUser === user.userId ? (
-                          <input
-                            type="text"
-                            value={editForm.accountType}
-                            onChange={(e) => setEditForm({ ...editForm, accountType: e.target.value })}
-                            className="border rounded px-2 py-1 w-full"
-                          />
-                        ) : (
-                          user.accountType
-                        )}
+                      <div>
+                        <p className="text-xs font-medium text-gray-500">Account Type</p>
+                        <div className="text-sm text-gray-700">
+                          {editingUser === user.userId ? (
+                            <input
+                              type="text"
+                              value={editForm.accountType}
+                              onChange={(e) => setEditForm({ ...editForm, accountType: e.target.value })}
+                              className="border rounded px-2 py-1 w-full"
+                            />
+                          ) : (
+                            user.accountType
+                          )}
+                        </div>
                       </div>
-                      <div className="text-sm text-gray-500">
-                        {editingUser === user.userId ? (
-                          <input
-                            type="number"
-                            value={editForm.balance}
-                            onChange={(e) => setEditForm({ ...editForm, balance: Number(e.target.value) })}
-                            className="border rounded px-2 py-1 w-full"
-                          />
-                        ) : (
-                          `₹ ${user.balance?.toLocaleString()}`
-                        )}
+                      <div>
+                        <p className="text-xs font-medium text-gray-500">Balance</p>
+                        <div className="text-sm text-gray-700">
+                          {editingUser === user.userId ? (
+                            <input
+                              type="number"
+                              value={editForm.balance}
+                              onChange={(e) => setEditForm({ ...editForm, balance: Number(e.target.value) })}
+                              className="border rounded px-2 py-1 w-full"
+                            />
+                          ) : (
+                            `₹ ${user.balance?.toLocaleString()}`
+                          )}
+                        </div>
                       </div>
-                      <div className="text-sm text-gray-500">
-                        {editingUser === user.userId ? (
-                          <input
-                            type="text"
-                            value={editForm.bankAccount}
-                            onChange={(e) => setEditForm({ ...editForm, bankAccount: e.target.value })}
-                            className="border rounded px-2 py-1 w-full"
-                          />
-                        ) : (
-                          user.bankAccount
-                        )}
+                      <div>
+                        <p className="text-xs font-medium text-gray-500">Bank Account</p>
+                        <div className="text-sm text-gray-700">
+                          {editingUser === user.userId ? (
+                            <div className="space-y-2">
+                              <div>
+                                <label className="text-xs text-gray-500">Bank Name</label>
+                                <input
+                                  type="text"
+                                  value={editForm.bankName || ""}
+                                  onChange={(e) => setEditForm({ ...editForm, bankName: e.target.value })}
+                                  className="border rounded px-2 py-1 w-full"
+                                  placeholder="Enter bank name"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-xs text-gray-500">Account Number</label>
+                                <input
+                                  type="text"
+                                  value={editForm.bankAccount}
+                                  onChange={(e) => setEditForm({ ...editForm, bankAccount: e.target.value })}
+                                  className="border rounded px-2 py-1 w-full"
+                                  placeholder="Enter account number"
+                                />
+                              </div>
+                              <p className="text-xs text-gray-500 mt-1">
+                                This is the bank account for withdrawals
+                              </p>
+                            </div>
+                          ) : (
+                            <div>
+                              <span className="font-medium">{user.bankName || "CANARA"}: </span>
+                              {user.bankAccount || "Not Set"}
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div className="text-sm text-gray-500 flex items-center space-x-2">
+                      <div className="flex items-center space-x-2">
                         {editingUser === user.userId ? (
                           <button
                             onClick={() => handleSaveEdit(user.userId)}
@@ -302,7 +349,7 @@ function AdminDashboard() {
                       </div>
                     </div>
                   </div>
-                  
+
                   {expandedUser === user.userId && (
                     <div className="p-4 bg-white">
                       <div className="mb-4">
@@ -326,13 +373,13 @@ function AdminDashboard() {
                           />
                           <button
                             type="submit"
-                            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                            className="btn-gradient px-4 py-2 rounded-md"
                           >
                             Add
                           </button>
                         </form>
                       </div>
-                      
+
                       <div className="space-y-2">
                         {transactions
                           .filter(t => t.userId === user.userId)
@@ -486,18 +533,30 @@ function AdminDashboard() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Bank Account</label>
+                <label className="block text-sm font-medium text-gray-700">Bank Name</label>
+                <input
+                  type="text"
+                  required
+                  value={addForm.bankName || ""}
+                  onChange={(e) => setAddForm({ ...addForm, bankName: e.target.value })}
+                  placeholder="Enter bank name (e.g. CANARA)"
+                  className="mt-1 block w-full border rounded-md shadow-sm py-2 px-3"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Bank Account Number</label>
                 <input
                   type="text"
                   required
                   value={addForm.bankAccount}
                   onChange={(e) => setAddForm({ ...addForm, bankAccount: e.target.value })}
+                  placeholder="Enter bank account number"
                   className="mt-1 block w-full border rounded-md shadow-sm py-2 px-3"
                 />
               </div>
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+                className="w-full btn-gradient py-2 px-4 rounded-md"
               >
                 Add User
               </button>

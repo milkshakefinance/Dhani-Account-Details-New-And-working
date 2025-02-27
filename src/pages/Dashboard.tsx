@@ -15,13 +15,16 @@ function Dashboard() {
   const transactions = currentUser ? getTransactionsForUser(currentUser.userId) : [];
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-custom-gradient">
       <nav className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <div className="flex items-center">
-              <IndianRupee className="w-8 h-8 text-blue-600" />
-              <span className="ml-2 text-xl font-semibold">Dhani-Finance</span>
+              <img 
+                src="https://raw.githubusercontent.com/dljs2001/Images/refs/heads/main/logo.png" 
+                alt="Dhani Finance" 
+                className="h-10" 
+              />
             </div>
             <button
               onClick={handleLogout}
@@ -36,7 +39,7 @@ function Dashboard() {
 
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="bg-white rounded-lg shadow p-6 text-gray-900">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Account Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -57,9 +60,13 @@ function Dashboard() {
               </div>
             </div>
 
-            <button className="mt-6 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
-              Withdraw To Your CANARA Bank Account: {currentUser?.bankAccount}
-            </button>
+            <div className="mt-6">
+              <p className="text-sm text-gray-600 mb-2">{currentUser?.bankName || "CANARA"} Bank Account</p>
+              <p className="text-lg font-medium mb-2">{currentUser?.bankAccount || "Not Set"}</p>
+              <button className="w-full py-2 px-4 rounded-md btn-gradient">
+                Withdraw To Your {currentUser?.bankName || "CANARA"} Bank Account
+              </button>
+            </div>
           </div>
 
           <div className="mt-6 bg-white rounded-lg shadow">
@@ -88,4 +95,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard
+export default Dashboard;

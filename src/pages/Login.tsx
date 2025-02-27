@@ -33,11 +33,14 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-custom-gradient flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
         <div className="flex items-center justify-center mb-8">
-          <IndianRupee className="w-12 h-12 text-blue-600" />
-          <h1 className="text-3xl font-bold text-gray-900 ml-2">Dhani-Finance</h1>
+          <img 
+            src="https://raw.githubusercontent.com/dljs2001/Images/refs/heads/main/logo.png" 
+            alt="Dhani Finance" 
+            className="h-16" 
+          />
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -73,7 +76,7 @@ function Login() {
 
           <button
             type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white btn-gradient focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
           >
             Log In
           </button>
@@ -84,7 +87,7 @@ function Login() {
             Don't have an account?{' '}
             <button
               onClick={() => alert('Sign up functionality coming soon!')}
-              className="font-medium text-blue-600 hover:text-blue-500"
+              className="font-medium text-red-700 hover:text-red-500"
             >
               Sign Up
             </button>
